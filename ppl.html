@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panchobh Premier League</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rajdhani:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqfRTc5E7F9cKAQ8wF5LTQGo7pr75fzkaH_A&s') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+
+    header {
+      height: 100vh;
+      background: rgba(0,0,0,0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      font-family: 'Orbitron', sans-serif;
+      color: #ffd700;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px #000;
+    }
+
+    .btn-container {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 25px;
+    }
+
+    .btn {
+      background: #ff4040;
+      color: #fff;
+      padding: 15px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      box-shadow: 0 0 10px #ff4040;
+    }
+
+    .btn:hover {
+      background: #ffd700;
+      color: #000;
+      box-shadow: 0 0 15px #ffd700;
+    }
+
+    .countdown {
+      font-size: 1.6rem;
+      margin-top: 10px;
+      padding: 10px 20px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 8px;
+      color: #0ff;
+      font-weight: bold;
+      box-shadow: 0 0 12px #0ff;
+    }
+
+    section {
+      padding: 60px 20px;
+      background: rgba(0, 0, 0, 0.85);
+      text-align: center;
+    }
+
+    section h2 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: #ffd700;
+      text-shadow: 1px 1px #000;
+    }
+
+    section p {
+      font-size: 1rem;
+      color: #ccc;
+    }
+
+    .popup {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #111;
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: 2px solid #ffd700;
+      z-index: 1000;
+      animation: bounce 2s infinite;
+    }
+
+    .popup a {
+      color: #0ff;
+      text-decoration: none;
+    }
+
+    footer {
+      text-align: center;
+      background: rgba(0, 0, 0, 0.85);
+      color: #aaa;
+      padding: 20px;
+      font-weight: bold;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @media (max-width: 768px) {
+      header h1 { font-size: 2rem; }
+      .btn { font-size: 1rem; padding: 12px 18px; }
+      .countdown { font-size: 1.2rem; padding: 8px 15px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Panchobh Premier League</h1>
+    <div class="btn-container">
+      <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSf8ehCmy7oEwBT31WNd6CSrRHYfxwJqM5uj14xm-loCfGmMdg/viewform" target="_blank">Player Registration</a>
+      <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSeORZfrBugB3hmwdx4vklkZY9O7bFwqfczxiAj63Ou-rd72og/viewform" target="_blank">Team Registration</a>
+      <a class="btn" href="#scores">View Scores</a>
+      <a class="btn" href="#stats">Top Player Stats</a>
+    </div>
+    <div class="countdown" id="countdown"></div>
+  </header>
+
+  <section id="scores">
+    <h2>Match Scores</h2>
+    <p>Live and previous match scores will appear here. (Coming Soon)</p>
+  </section>
+
+  <section id="stats">
+    <h2>Top Player Stats</h2>
+    <p>Top Scorer, Most Wickets, and more! (Coming Soon)</p>
+  </section>
+
+  <div class="popup">
+    📷 Follow us on 
+    <a href="https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=z0khsgk" target="_blank">Instagram</a>
+  </div>
+
+  <footer>Aditya Project</footer>
+
+  <script>
+    const countdown = document.getElementById("countdown");
+    const targetDate = new Date("October 21, 2025 00:00:00").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        countdown.innerHTML = "🎉 The tournament has started!";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hrs = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const secs = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdown.innerHTML = `⏳ Starts in: ${days}d ${hrs}h ${mins}m ${secs}s`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+
+</body>
+</html>
