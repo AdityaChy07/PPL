@@ -1,187 +1,710 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Panchobh Premier League</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rajdhani:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Panchobh Premiere League — Live Auction</title>
 
-    body {
-      font-family: 'Rajdhani', sans-serif;
-      background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqfRTc5E7F9cKAQ8wF5LTQGo7pr75fzkaH_A&s') no-repeat center center fixed;
-      background-size: cover;
-      color: #fff;
-    }
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rajdhani:wght@400;700&display=swap" rel="stylesheet">
 
-    header {
-      height: 100vh;
-      background: rgba(0,0,0,0.75);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      text-align: center;
-      padding: 20px;
-    }
+<style>
+  :root{
+    --bg:#0b0b0b; --card:#0f0f10; --accent:#ffd700; --danger:#ff4040; --muted:#9aa0a6;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family: 'Rajdhani', sans-serif; background:#050505; color:#fff;
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  }
 
-    header h1 {
-      font-size: 3rem;
-      font-family: 'Orbitron', sans-serif;
-      color: #ffd700;
-      margin-bottom: 30px;
-      text-shadow: 2px 2px #000;
-    }
+  /* background stadium feel */
+  .hero-bg{
+    background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqfRTc5E7F9cKAQ8wF5LTQGo7pr75fzkaH_A&s') center/cover no-repeat;
+    min-height: 380px; display:flex; align-items:center; justify-content:center; padding:48px 20px;
+  }
+  .brand{
+    text-align:center;
+  }
+  .brand h1{ font-family:'Orbitron',sans-serif; color:var(--accent); font-size:42px; margin:0 0 10px; text-shadow: 0 2px 18px rgba(255,215,0,0.12);}
+  .brand p{ color:#ddd; margin:0; font-size:16px;}
 
-    .btn-container {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 25px;
-    }
+  /* navbar */
+  nav{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; padding:12px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.3)); position:sticky; top:0; z-index:1000; border-bottom:1px solid rgba(255,255,255,0.03);}
+  .tab{padding:10px 14px; color:var(--accent); text-decoration:none; font-weight:700; cursor:pointer; border-radius:8px;}
+  .tab.active{ background: rgba(255,215,0,0.08); color:var(--accent); box-shadow: 0 6px 18px rgba(0,0,0,0.6); }
 
-    .btn {
-      background: #ff4040;
-      color: #fff;
-      padding: 15px 25px;
-      border: none;
-      border-radius: 8px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      box-shadow: 0 0 10px #ff4040;
-    }
+  /* container */
+  .container{max-width:1200px;margin:32px auto;padding:0 16px}
 
-    .btn:hover {
-      background: #ffd700;
-      color: #000;
-      box-shadow: 0 0 15px #ffd700;
-    }
+  /* layout */
+  .grid{display:grid; grid-template-columns:2fr 1fr; gap:20px;}
+  @media(max-width:900px){ .grid{grid-template-columns:1fr} }
 
-    .countdown {
-      font-size: 1.6rem;
-      margin-top: 10px;
-      padding: 10px 20px;
-      background: rgba(0, 0, 0, 0.6);
-      border-radius: 8px;
-      color: #0ff;
-      font-weight: bold;
-      box-shadow: 0 0 12px #0ff;
-    }
+  .card{background:linear-gradient(180deg,var(--card),#121212); padding:18px; border-radius:12px; box-shadow:0 8px 30px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.03)}
 
-    section {
-      padding: 60px 20px;
-      background: rgba(0, 0, 0, 0.85);
-      text-align: center;
-    }
+  h2{color:var(--accent);margin:0 0 12px;font-family:'Orbitron',sans-serif}
 
-    section h2 {
-      font-size: 2rem;
-      margin-bottom: 10px;
-      color: #ffd700;
-      text-shadow: 1px 1px #000;
-    }
+  /* buttons */
+  .btn{background:var(--danger); color:#fff; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; font-weight:700; box-shadow:0 6px 18px rgba(255,64,64,0.07)}
+  .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06); color:#fff}
+  .btn.gold{background:var(--accent); color:#111}
 
-    section p {
-      font-size: 1rem;
-      color: #ccc;
-    }
+  /* small UI */
+  .muted{color:var(--muted)}
+  .inline{display:inline-block}
 
-    .popup {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #111;
-      padding: 10px 15px;
-      border-radius: 8px;
-      border: 2px solid #ffd700;
-      z-index: 1000;
-      animation: bounce 2s infinite;
-    }
+  /* table */
+  table{width:100%; border-collapse:collapse; color:#fff}
+  th,td{padding:10px;border-bottom:1px dashed rgba(255,255,255,0.04); text-align:center}
+  th{background:rgba(255,64,64,0.9); color:#fff; font-weight:700}
+  tr:nth-child(even){background:rgba(255,255,255,0.02)}
 
-    .popup a {
-      color: #0ff;
-      text-decoration: none;
-    }
+  /* auction UI */
+  .player-title{font-size:20px;font-weight:700;color:var(--accent)}
+  .big{font-size:28px;font-weight:800;color:#0ff}
+  .small-muted{color:#bbb;font-size:13px}
 
-    footer {
-      text-align: center;
-      background: rgba(0, 0, 0, 0.85);
-      color: #aaa;
-      padding: 20px;
-      font-weight: bold;
-    }
+  .auction-controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .timer{font-weight:800;color:var(--accent); font-size:18px; background:rgba(0,0,0,0.6); padding:8px 12px;border-radius:8px;}
 
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
+  /* login form */
+  .form-row{margin:8px 0}
+  input, select{width:100%; padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04); background:rgba(255,255,255,0.02); color:#fff}
 
-    @media (max-width: 768px) {
-      header h1 { font-size: 2rem; }
-      .btn { font-size: 1rem; padding: 12px 18px; }
-      .countdown { font-size: 1.2rem; padding: 8px 15px; }
-    }
-  </style>
+  /* sold banner */
+  .sold-banner{background:linear-gradient(90deg,#0ff10a, #ffd700); color:#000; padding:12px; border-radius:8px; font-weight:800; text-align:center; box-shadow:0 8px 30px rgba(255,215,0,0.12)}
+
+  /* footer */
+  footer{padding:16px;text-align:center;color:#aaa;margin-top:30px}
+
+  /* popup instagram */
+  .insta{position:fixed; right:16px; bottom:16px; background:#111; padding:12px 14px; border-radius:8px; border:2px solid var(--accent); z-index:1200}
+  .insta a{color:var(--accent); font-weight:700; text-decoration:none}
+
+  /* responsive tweaks */
+  @media(max-width:520px){
+    .brand h1{font-size:28px}
+    th,td{padding:8px}
+  }
+</style>
 </head>
 <body>
 
-  <header>
-    <h1>Panchobh Premier League</h1>
-    <div class="btn-container">
-      <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSf8ehCmy7oEwBT31WNd6CSrRHYfxwJqM5uj14xm-loCfGmMdg/viewform" target="_blank">Player Registration</a>
-      <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSeORZfrBugB3hmwdx4vklkZY9O7bFwqfczxiAj63Ou-rd72og/viewform" target="_blank">Team Registration</a>
-      <a class="btn" href="#scores">View Scores</a>
-      <a class="btn" href="#stats">Top Player Stats</a>
+  <!-- HERO -->
+  <div class="hero-bg">
+    <div class="brand">
+      <h1>PANCHOBH PREMIERE LEAGUE</h1>
+      <p class="muted">Local tournament • Live auctions • Real-time bidding</p>
     </div>
-    <div class="countdown" id="countdown"></div>
-  </header>
-
-  <section id="scores">
-    <h2>Match Scores</h2>
-    <p>Live and previous match scores will appear here. (Coming Soon)</p>
-  </section>
-
-  <section id="stats">
-    <h2>Top Player Stats</h2>
-    <p>Top Scorer, Most Wickets, and more! (Coming Soon)</p>
-  </section>
-
-  <div class="popup">
-    📷 Follow us on 
-    <a href="https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=z0khsgk" target="_blank">Instagram</a>
   </div>
 
-  <footer>Aditya Project</footer>
+  <!-- NAV -->
+  <nav id="mainTabs">
+    <span class="tab active" data-tab="home">Home</span>
+    <span class="tab" data-tab="playerReg">Player Reg</span>
+    <span class="tab" data-tab="teamReg">Team Reg</span>
+    <span class="tab" data-tab="scores">Scores</span>
+    <span class="tab" data-tab="stats">Stats</span>
+    <span class="tab" data-tab="auctionTab">Auction</span>
+  </nav>
 
-  <script>
-    const countdown = document.getElementById("countdown");
-    const targetDate = new Date("October 21, 2025 00:00:00").getTime();
+  <div class="container">
 
-    function updateCountdown() {
-      const now = new Date().getTime();
-      const distance = targetDate - now;
+    <!-- HOME -->
+    <div id="home" class="tab-page">
+      <div class="grid">
+        <div class="card">
+          <h2>Welcome</h2>
+          <p class="muted">Panchobh Premiere League — get ready. Use the Auction tab to manage live player auctions. Tournament begins on <strong>21 October 2025</strong>.</p>
+          <div style="margin-top:18px">
+            <div class="muted">Tournament starts in</div>
+            <div id="tournCountdown" class="big">--</div>
+          </div>
+        </div>
 
-      if (distance < 0) {
-        countdown.innerHTML = "🎉 The tournament has started!";
-        return;
-      }
+        <div class="card">
+          <h2>Quick Actions</h2>
+          <div style="margin-top:12px">
+            <a class="btn" href="#playerReg" onclick="openTabFromLink('playerReg')">Register Player</a>
+            <a class="btn ghost" href="#teamReg" onclick="openTabFromLink('teamReg')">Owner Signup</a>
+          </div>
 
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hrs = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const secs = Math.floor((distance % (1000 * 60)) / 1000);
+          <div style="margin-top:18px" class="muted">Follow us</div>
+          <div style="margin-top:8px"><a class="btn gold inline" href="https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=z0khsgk" target="_blank">Instagram</a></div>
+        </div>
+      </div>
+    </div>
 
-      countdown.innerHTML = `⏳ Starts in: ${days}d ${hrs}h ${mins}m ${secs}s`;
+    <!-- PLAYER REG -->
+    <div id="playerReg" class="tab-page" style="display:none">
+      <div class="card">
+        <h2>Player Registration</h2>
+        <p class="muted">Click the button to fill player registration form.</p>
+        <div style="margin-top:12px"><a class="btn" target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSf8ehCmy7oEwBT31WNd6CSrRHYfxwJqM5uj14xm-loCfGmMdg/viewform">Open Player Form</a></div>
+      </div>
+    </div>
+
+    <!-- TEAM REG -->
+    <div id="teamReg" class="tab-page" style="display:none">
+      <div class="card">
+        <h2>Team Owner Registration</h2>
+        <p class="muted">Click to register team owner. After owner account is created, an admin must add their UID under <code>/owners/&lt;uid&gt;</code> in Firebase to allow bidding.</p>
+        <div style="margin-top:12px"><a class="btn" target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSeORZfrBugB3hmwdx4vklkZY9O7bFwqfczxiAj63Ou-rd72og/viewform">Open Owner Form</a></div>
+      </div>
+    </div>
+
+    <!-- SCORES -->
+    <div id="scores" class="tab-page" style="display:none">
+      <div class="card">
+        <h2>Match Scores</h2>
+        <p class="muted">Scores will be added here later. For now use the Score app link or embed a live sheet.</p>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div id="stats" class="tab-page" style="display:none">
+      <div class="card">
+        <h2>Top Stats</h2>
+        <p class="muted">Top scorers, most wickets and more (coming soon).</p>
+      </div>
+    </div>
+
+    <!-- AUCTION (main) -->
+    <div id="auctionTab" class="tab-page" style="display:none">
+      <div class="grid">
+        <!-- Left column: auction UI -->
+        <div>
+          <div class="card" id="auctionCard">
+            <h2>Auction</h2>
+
+            <!-- sub-tabs -->
+            <div style="display:flex;gap:8px;margin-bottom:12px">
+              <button id="showBase" class="btn ghost">Player Base Price</button>
+              <button id="showLive" class="btn">Live Auction</button>
+            </div>
+
+            <!-- BASE PRICE CONTENT -->
+            <div id="baseSection">
+              <div class="muted">Base price list</div>
+              <table style="margin-top:12px">
+                <thead><tr><th>Player</th><th>Base (₹)</th><th>Base (points)</th></tr></thead>
+                <tbody id="baseTable"></tbody>
+              </table>
+            </div>
+
+            <!-- LIVE AUCTION CONTENT -->
+            <div id="liveSection" style="display:none; margin-top:12px">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+                <div>
+                  <div class="player-title" id="livePlayer">—</div>
+                  <div class="small-muted" id="liveBase">Base: —</div>
+                </div>
+                <div style="text-align:right">
+                  <div class="small-muted">Highest Bid</div>
+                  <div class="big" id="liveHighest">—</div>
+                  <div class="small-muted" id="liveHighestBidder">—</div>
+                </div>
+              </div>
+
+              <div style="margin-top:16px" class="auction-controls">
+                <!-- show bid button only if owner -->
+                <button id="placeBidBtn" class="btn" style="display:none">Place Bid (₹ <span id="bidIncrementDisplay">10</span>)</button>
+                <button id="stopBiddingBtn" class="btn ghost" style="display:none">Stop Bidding (Admin)</button>
+                <div id="countdownTimer" class="timer" style="display:none">20</div>
+              </div>
+
+              <div style="margin-top:12px" class="muted">Log</div>
+              <div id="activityLog" class="card" style="margin-top:8px; background: rgba(0,0,0,0.6); max-height:180px; overflow:auto; padding:8px; border-radius:8px"></div>
+
+              <div id="soldBanner" style="display:none;margin-top:12px"></div>
+
+              <div style="margin-top:12px" class="small-muted">Notes: Only owners listed under <code>/owners/&lt;uid&gt;</code> can bid. Admins under <code>/admins/&lt;uid&gt;</code> can control auctions.</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right column: auth + players list + results -->
+        <div>
+          <div class="card">
+            <h2>Account</h2>
+            <div id="authArea">
+              <div class="form-row"><input id="email" placeholder="Email" /></div>
+              <div class="form-row"><input id="password" placeholder="Password" type="password" /></div>
+              <div style="display:flex;gap:8px">
+                <button id="btnSignUp" class="btn ghost">Sign up</button>
+                <button id="btnSignIn" class="btn">Sign in</button>
+              </div>
+
+              <div style="margin-top:8px" class="muted">If you are a team owner you must be approved by admin — admin adds your UID to <code>/owners</code>.</div>
+            </div>
+
+            <div id="userArea" style="display:none">
+              <div class="muted">Signed in as</div>
+              <div id="userEmail" style="font-weight:800;margin-top:6px"></div>
+              <div id="userRoleInfo" class="small-muted" style="margin-top:8px"></div>
+              <div style="margin-top:8px;display:flex;gap:8px">
+                <button id="btnSignOut" class="btn ghost">Sign out</button>
+                <button id="btnRequestOwner" class="btn ghost">Request Owner</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:12px">
+            <h2>Players</h2>
+            <div id="playersList" style="max-height:360px;overflow:auto"></div>
+          </div>
+
+          <div class="card" style="margin-top:12px">
+            <h2>Actual Prices (Live)</h2>
+            <div id="resultsList" style="max-height:220px;overflow:auto"></div>
+            <div style="margin-top:8px"><button id="openResults" class="btn ghost">Refresh Results</button></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Instagram popup -->
+  <div class="insta"><a href="https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=z0khsgk" target="_blank">Follow on Instagram</a></div>
+
+  <footer>Aditya Project • PANCHOBH PREMIERE LEAGUE</footer>
+
+<!-- Firebase (compat) SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<script>
+/* ----------------- FIREBASE CONFIG (your config pasted) -----------------
+   Replace with your own config if it changes. You already provided this earlier.
+------------------------------------------------------------------------- */
+const firebaseConfig = {
+  apiKey: "AIzaSyBmStNxGf0vY4s6hVerPEYhGsnjw8Gy3dk",
+  authDomain: "aditya-project-dfc32.firebaseapp.com",
+  databaseURL: "https://aditya-project-dfc32-default-rtdb.firebaseio.com",
+  projectId: "aditya-project-dfc32",
+  storageBucket: "aditya-project-dfc32.firebasestorage.app",
+  messagingSenderId: "354432898391",
+  appId: "1:354432898391:web:1c322af0c2e3baca719a12",
+  measurementId: "G-JE8KZ30XRW"
+};
+// initialize
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+/* ----------------------------------------------------------------------- */
+
+/* ----------------- App Data: base prices (points) ----------------- */
+const players = [
+  { name: "Aditya", basePoints:15000 },
+  { name: "Sahil", basePoints:45000 },
+  { name: "Vivek", basePoints:45870 },
+  { name: "Manishankar", basePoints:85236 },
+  { name: "Kunal", basePoints:20000 },
+  { name: "Aakash", basePoints:15230 },
+  { name: "Mohit", basePoints:1023080 }
+];
+
+const POINTS_PER_RUPEE = 100;       // 100 points = 1 ₹
+const RUPEE_INCREMENT = 10;         // each click adds ₹10
+const POINT_INCREMENT = RUPEE_INCREMENT * POINTS_PER_RUPEE; // 1000 points
+
+/* ----------------- UI helpers & state ----------------- */
+let localUser = null;
+let isOwner = false;
+let isAdmin = false;
+let currentAuction = null; // mirror of /auction/current
+let timerInterval = null;  // admin-driven countdown interval
+
+// Tabs handling
+document.querySelectorAll('.tab').forEach(el=>{
+  el.addEventListener('click', ()=> {
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    el.classList.add('active');
+    openTab(el.dataset.tab);
+  });
+});
+function openTab(id){
+  document.querySelectorAll('.tab-page').forEach(p=>p.style.display='none');
+  const el = document.getElementById(id);
+  if (el) el.style.display='block';
+}
+function openTabFromLink(id){
+  document.querySelector(`.tab[data-tab="${id}"]`).click();
+}
+/* show home by default */
+openTab('home');
+
+/* ----------------- Tournament countdown ----------------- */
+function startTournamentCountdown(){
+  const target = new Date("October 21, 2025 00:00:00").getTime();
+  const el = document.getElementById('tournCountdown');
+  function tick(){
+    const now = Date.now();
+    const d = target - now;
+    if (d<=0){ el.innerText='Tournament started'; return; }
+    const days = Math.floor(d/(1000*60*60*24));
+    const hrs = Math.floor((d%(1000*60*60*24))/(1000*60*60));
+    const mins = Math.floor((d%(1000*60*60))/(1000*60));
+    const secs = Math.floor((d%(1000*60))/1000);
+    el.innerText = `${days}d ${hrs}h ${mins}m ${secs}s`;
+  }
+  tick(); setInterval(tick,1000);
+}
+startTournamentCountdown();
+
+/* ----------------- populate base table and players list ----------------- */
+function renderBasePrices(){
+  const tbody = document.getElementById('baseTable');
+  tbody.innerHTML = '';
+  players.forEach(p=>{
+    const tr = document.createElement('tr');
+    const rupees = (p.basePoints/POINTS_PER_RUPEE).toLocaleString();
+    tr.innerHTML = `<td>${p.name}</td><td>₹ ${rupees}</td><td>${p.basePoints.toLocaleString()}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+function renderPlayersList(){
+  const wrap = document.getElementById('playersList');
+  wrap.innerHTML = '';
+  players.forEach(p=>{
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.style.marginBottom='8px';
+    div.innerHTML = `<div style="display:flex;justify-content:space-between"><div><strong>${p.name}</strong><div class="small-muted">Base: ₹ ${(p.basePoints/POINTS_PER_RUPEE).toLocaleString()} (${p.basePoints.toLocaleString()} pts)</div></div><div><button class="btn ghost" onclick="setAsCurrent('${p.name}')">Set as Current</button></div></div>`;
+    wrap.appendChild(div);
+  });
+}
+renderBasePrices();
+renderPlayersList();
+
+/* ----------------- UI: auction sub-tabs ----------------- */
+document.getElementById('showBase').addEventListener('click', ()=>{
+  document.getElementById('baseSection').style.display='block';
+  document.getElementById('liveSection').style.display='none';
+  document.getElementById('showBase').classList.add('btn'); document.getElementById('showBase').classList.remove('btn','ghost'); // keep style simple
+});
+document.getElementById('showLive').addEventListener('click', ()=>{
+  document.getElementById('baseSection').style.display='none';
+  document.getElementById('liveSection').style.display='block';
+});
+
+/* ----------------- Auth: Sign up / sign in / sign out ----------------- */
+const emailEl = document.getElementById('email');
+const passwordEl = document.getElementById('password');
+const btnSignUp = document.getElementById('btnSignUp');
+const btnSignIn = document.getElementById('btnSignIn');
+const btnSignOut = document.getElementById('btnSignOut');
+const userArea = document.getElementById('userArea');
+const authArea = document.getElementById('authArea');
+const userEmail = document.getElementById('userEmail');
+const userRoleInfo = document.getElementById('userRoleInfo');
+const btnRequestOwner = document.getElementById('btnRequestOwner');
+
+btnSignUp.onclick = async ()=>{
+  const email = emailEl.value.trim(), pass = passwordEl.value;
+  if (!email || !pass){ alert('Enter email & password'); return; }
+  try{
+    const cred = await auth.createUserWithEmailAndPassword(email, pass);
+    alert('Signed up — await admin approval for owner role if needed. Your UID: ' + cred.user.uid);
+    emailEl.value=''; passwordEl.value='';
+  }catch(e){ alert(e.message); }
+};
+btnSignIn.onclick = async ()=>{
+  const email = emailEl.value.trim(), pass = passwordEl.value;
+  if (!email || !pass){ alert('Enter email & password'); return; }
+  try{
+    await auth.signInWithEmailAndPassword(email, pass);
+  }catch(e){ alert(e.message); }
+};
+btnSignOut.onclick = ()=> auth.signOut();
+
+btnRequestOwner.onclick = async ()=>{
+  const u = auth.currentUser;
+  if (!u) return alert('Sign in first');
+  const team = prompt('Enter your Team name (request will be sent to admin):');
+  if (!team) return;
+  // push request to DB under /roleRequests/<uid> for admin to process
+  await db.ref('roleRequests/'+u.uid).set({email:u.email, team:team, ts:Date.now()});
+  alert('Owner request sent to admin. Admin will approve by adding you under /owners/<uid>');
+};
+
+/* ----------------- Auth state handling & role checks ----------------- */
+auth.onAuthStateChanged(async (user)=>{
+  localUser = user;
+  if (user){
+    userArea.style.display='block'; authArea.style.display='none';
+    userEmail.innerText = user.email;
+    // check roles in DB
+    const [adminSnap, ownerSnap] = await Promise.all([db.ref('admins/'+user.uid).get(), db.ref('owners/'+user.uid).get()]);
+    isAdmin = adminSnap.exists() && adminSnap.val() === true;
+    if (ownerSnap.exists()){
+      isOwner = true;
+      const team = ownerSnap.val() || 'Owner';
+      userRoleInfo.innerText = 'Owner — ' + team;
+    } else {
+      isOwner = false;
+      userRoleInfo.innerText = isAdmin ? 'Admin' : 'Viewer (not owner)';
     }
+    // show admin controls if admin
+    document.getElementById('stopBiddingBtn').style.display = isAdmin ? 'inline-block' : 'none';
+    // show bid button if owner
+    document.getElementById('placeBidBtn').style.display = isOwner ? 'inline-block' : 'none';
+    // show sign out
+    btnSignOut.style.display='inline-block';
+  } else {
+    localUser = null; isAdmin = false; isOwner = false;
+    userArea.style.display='none'; authArea.style.display='block';
+    document.getElementById('stopBiddingBtn').style.display='none';
+    document.getElementById('placeBidBtn').style.display='none';
+  }
+});
 
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
-  </script>
+/* ----------------- Auction DB schema: /auction/current -----------------
+Structure:
+auction/current = {
+  player: "Aditya",
+  basePoints: 15000,
+  currentBidPoints: 15000,
+  lastBidder: "Team A",
+  active: true/false,
+  timer: 0 // remaining seconds (admin will drive countdown)
+}
+--------------------------------------------------------------------- */
+
+const auctionRef = db.ref('auction/current');
+const bidsRefRoot = db.ref('bids'); // bids/<player>/
+
+// helper: set current player (admin or local clicking Set as Current)
+window.setAsCurrent = async (playerName) =>{
+  // find basePoints
+  const p = players.find(x=>x.name===playerName);
+  if (!p) return alert('Player not found');
+  // require admin for writing current in rules ideally, but allow in testing
+  await auctionRef.set({
+    player: p.name,
+    basePoints: p.basePoints,
+    currentBidPoints: p.basePoints,
+    lastBidder: null,
+    active: false,
+    timer: 0
+  });
+  appendLog(`[SYSTEM] Selected ${p.name} as current player.`);
+};
+
+// Listen to auction/current updates
+auctionRef.on('value', snap=>{
+  const data = snap.val();
+  currentAuction = data || null;
+  updateAuctionUI();
+});
+
+// Update the UI from currentAuction
+function updateAuctionUI(){
+  const livePlayer = document.getElementById('livePlayer');
+  const liveBase = document.getElementById('liveBase');
+  const liveHighest = document.getElementById('liveHighest');
+  const liveHighestBidder = document.getElementById('liveHighestBidder');
+  const countdownTimer = document.getElementById('countdownTimer');
+  const placeBidBtn = document.getElementById('placeBidBtn');
+
+  if (!currentAuction || !currentAuction.player){
+    livePlayer.innerText = '—';
+    liveBase.innerText = 'Base: —';
+    liveHighest.innerText = '—';
+    liveHighestBidder.innerText = '—';
+    countdownTimer.style.display='none';
+    return;
+  }
+
+  livePlayer.innerText = currentAuction.player;
+  liveBase.innerText = `Base: ₹ ${(currentAuction.basePoints/POINTS_PER_RUPEE).toLocaleString()} (${currentAuction.basePoints.toLocaleString()} pts)`;
+  liveHighest.innerText = currentAuction.currentBidPoints ? `₹ ${(currentAuction.currentBidPoints/POINTS_PER_RUPEE).toLocaleString()} (${currentAuction.currentBidPoints.toLocaleString()} pts)` : `₹ ${(currentAuction.basePoints/POINTS_PER_RUPEE).toLocaleString()} (${currentAuction.basePoints.toLocaleString()} pts)`;
+  liveHighestBidder.innerText = currentAuction.lastBidder ? `Last: ${currentAuction.lastBidder}` : 'No bids yet';
+
+  // show/hide countdown
+  if (currentAuction.timer && currentAuction.timer > 0){
+    countdownTimer.style.display='inline-block';
+    countdownTimer.innerText = currentAuction.timer + 's';
+  } else {
+    countdownTimer.style.display='none';
+  }
+
+  // show place bid button only if local user is owner
+  if (localUser && isOwner){
+    document.getElementById('placeBidBtn').style.display='inline-block';
+  } else {
+    document.getElementById('placeBidBtn').style.display='none';
+  }
+}
+
+/* ----------------- bidding: atomic transaction ----------------- */
+function appendLog(text){
+  const el = document.getElementById('activityLog');
+  const now = new Date().toLocaleTimeString();
+  el.innerHTML = `<div style="margin-bottom:6px">[${now}] ${text}</div>` + el.innerHTML;
+}
+
+// place bid (owner only)
+document.getElementById('placeBidBtn').addEventListener('click', async ()=>{
+  if (!localUser) return alert('Sign in to bid');
+  // verify owner in DB (server-side recommended)
+  const ownerSnap = await db.ref('owners/'+localUser.uid).get();
+  if (!ownerSnap.exists()){
+    return alert('You are not authorized as a team owner. Ask admin to add your UID under /owners.');
+  }
+  const teamName = ownerSnap.val() || localUser.email;
+
+  // read current auction
+  const snap = await auctionRef.get();
+  const cur = snap.val();
+  if (!cur || !cur.player) return alert('No player currently selected.');
+  if (!cur.active) return alert('Auction is not live. Wait for admin to start.');
+
+  const min = Math.max(cur.currentBidPoints || 0, cur.basePoints || 0);
+  const newBid = min + POINT_INCREMENT; // increase by fixed increment
+  // atomic set: use transaction on currentBidPoints to ensure only higher wins
+  auctionRef.child('currentBidPoints').transaction(function(currentVal){
+    if (currentVal === null || newBid > currentVal) {
+      return newBid;
+    }
+    return; // abort
+  }, function(err, committed, snapshot){
+    if (err) {
+      alert('Error placing bid: '+err);
+    } else if (!committed) {
+      alert('Another higher bid exists. Try again.');
+    } else {
+      // update lastBidder and write bid record
+      auctionRef.update({ lastBidder: teamName });
+      const bidRec = { bidder: teamName, amountPoints: newBid, ts: Date.now() };
+      db.ref('bids/'+cur.player).push(bidRec);
+      appendLog(`${teamName} placed bid ₹ ${(newBid/POINTS_PER_RUPEE).toLocaleString()} (${newBid.toLocaleString()} pts)`);
+      // reset timer if any admin started it (admin will control)
+      // if timer is running we expect admin to keep countdown going; but we also update timer to 20 to extend if needed
+      // optional: write auction.timer = 20 to DB to extend; skip for now (admin controls)
+    }
+  });
+});
+
+/* ----------------- Admin controls: start / stop bidding & timer ----------------- */
+document.getElementById('stopBiddingBtn').addEventListener('click', async ()=>{
+  // only admin
+  if (!localUser || !isAdmin) return alert('Only admin can stop bidding');
+  const snap = await auctionRef.get();
+  const cur = snap.val();
+  if (!cur || !cur.player) return alert('No current player to stop bidding for');
+  if (!cur.lastBidder){
+    return alert('No bids placed yet for this player.');
+  }
+
+  // start 20-second countdown by writing timer to DB and running admin interval to decrement
+  await auctionRef.update({ timer:20 });
+  appendLog('Admin started 20s countdown');
+  // admin must run decrement loop locally; implement a simple loop here (only admin will run this)
+  let remaining = 20;
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(async ()=>{
+    remaining--;
+    await auctionRef.update({ timer: remaining });
+    if (remaining <= 0){
+      clearInterval(timerInterval);
+      timerInterval = null;
+      // finalize sale: write result and set active false and timer 0
+      const final = (await auctionRef.get()).val();
+      await db.ref('results/'+final.player).set({ pricePoints: final.currentBidPoints || final.basePoints, winner: final.lastBidder, ts: Date.now() });
+      await auctionRef.update({ active:false, timer:0 });
+      appendLog(`Admin closed auction: ${final.player} sold to ${final.lastBidder} for ₹ ${(final.currentBidPoints/POINTS_PER_RUPEE).toLocaleString()} (${final.currentBidPoints.toLocaleString()} pts)`);
+      // show sold banner briefly (clients will read from results)
+      // optionally advance to next player automatically if desired (admin can click "Set as current" for next)
+    }
+  }, 1000);
+});
+
+/* Admin: start auction (set active true) - reuse setAsCurrent to set base first, then start */
+async function adminStartAuction(){
+  if (!localUser || !isAdmin) return alert('Only admin can start auction');
+  const cur = (await auctionRef.get()).val();
+  if (!cur || !cur.player) return alert('No player selected (use Set as Current)');
+  await auctionRef.update({ active:true, timer:0 });
+  appendLog('Admin started auction for ' + cur.player);
+}
+// For convenience: start auction when admin clicks on current player's Set as Current button, else add a UI button
+// We'll hook keyboard shortcut: admin can double-click current player display to start
+document.getElementById('livePlayer').addEventListener('dblclick', adminStartAuction);
+
+/* ----------------- Listen to results changes to show sold items ----------------- */
+db.ref('results').on('value', snap=>{
+  const val = snap.val() || {};
+  const wrap = document.getElementById('resultsList');
+  wrap.innerHTML = '';
+  const players = Object.keys(val);
+  if (players.length===0){
+    wrap.innerHTML = '<div class="muted">No results yet</div>';
+    return;
+  }
+  players.forEach(name=>{
+    const r = val[name];
+    const rupees = r.pricePoints ? (r.pricePoints/POINTS_PER_RUPEE).toLocaleString() : '-';
+    const item = document.createElement('div');
+    item.style.padding='8px'; item.style.borderBottom='1px solid rgba(255,255,255,0.03)';
+    item.innerHTML = `<strong>${name}</strong><div class="small-muted">Sold to ${r.winner || '-'} for ₹ ${rupees} (${r.pricePoints ? r.pricePoints.toLocaleString() : '-' } pts)</div>`;
+    wrap.appendChild(item);
+  });
+});
+
+/* ----------------- Listen for bids log (optional display) ----------------- */
+db.ref('bids').on('child_added', snap=>{
+  // new player bids node created
+  // no-op
+});
+db.ref('bids').on('child_changed', snap=>{
+  // no-op
+});
+
+/* ----------------- Refresh activity & results UI ----------------- */
+document.getElementById('openResults').addEventListener('click', async ()=> {
+  const r = await db.ref('results').get();
+  if (!r.exists()) { alert('No results yet'); return; }
+  alert('Results refreshed in the right pane');
+});
+
+/* ----------------- init: push base prices to DB if missing (admin optional) ----------------- */
+async function initBasePricesToDB(){
+  const snap = await db.ref('basePrices').get();
+  if (!snap.exists()){
+    const obj = {};
+    players.forEach(p=> obj[p.name] = p.basePoints);
+    await db.ref('basePrices').set(obj);
+    appendLog('Base prices initialised to DB.');
+  }
+}
+// initBasePricesToDB(); // admin can uncomment to push
+
+/* ----------------- small helpers & initial UI update ----------------- */
+function showSoldBanner(text){
+  const el = document.getElementById('soldBanner');
+  el.style.display='block'; el.className='sold-banner'; el.innerText = text;
+  setTimeout(()=>{ el.style.display='none'; }, 4500);
+}
+
+/* Reflection: when results change for the current player show sold */
+db.ref('results').on('child_added', snap=>{
+  const player = snap.key; const r = snap.val();
+  // If it's the current player show a banner
+  const cur = currentAuction && currentAuction.player;
+  if (cur === player){
+    showSoldBanner(`SOLD: ${player} → ${r.winner} for ₹ ${(r.pricePoints/POINTS_PER_RUPEE).toLocaleString()} (${r.pricePoints.toLocaleString()} pts)`);
+  }
+});
+
+/* ----------------- finally, small instructions for admin in console ----------------- */
+console.log('PPL Auction UI loaded. Make sure you set /admins/<uid>=true and /owners/<uid>="TeamName" in your Realtime DB for permissions.');
+</script>
 
 </body>
 </html>
